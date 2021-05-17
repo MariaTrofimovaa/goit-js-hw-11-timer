@@ -11,27 +11,33 @@ class CountdownTimer {
     };
   }
 
-  updateTime() {
+  startTimer() {
     setInterval(() => {
       this.startTime = new Date();
       this.endTime = this.targetDate - this.startTime;
 
-      this.days = Math.floor(this.endTime / (1000 * 60 * 60 * 24));
-      this.hours = pad(
-        Math.floor((this.endTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-      );
-      this.mins = pad(
-        Math.floor((this.endTime % (1000 * 60 * 60)) / (1000 * 60)),
-      );
-      this.secs = pad(Math.floor((this.endTime % (1000 * 60)) / 1000));
-
-      this.refs.days.textContent = `${this.days}`;
-      this.refs.hours.textContent = `${this.hours}`;
-      this.refs.mins.textContent = `${this.mins}`;
-      this.refs.secs.textContent = `${this.secs}`;
+      this.timeTransform(this.endTime);
     }, 1000);
+  }
 
+  timeTransform(time) {
     const pad = value => String(value).padStart(2, '0');
+
+    this.days = Math.floor(time / (1000 * 60 * 60 * 24));
+    this.hours = pad(
+      Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    );
+    this.mins = pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+    this.secs = pad(Math.floor((time % (1000 * 60)) / 1000));
+
+    this.changeTimer(this.days, this.hours, this.mins, this.secs);
+  }
+
+  changeTimer(days, hours, mins, secs) {
+    this.refs.days.textContent = `${days}`;
+    this.refs.hours.textContent = `${hours}`;
+    this.refs.mins.textContent = `${mins}`;
+    this.refs.secs.textContent = `${secs}`;
   }
 }
 
@@ -39,4 +45,4 @@ const timer = new CountdownTimer({
   selector: '#timer-1',
   targetDate: new Date('Jul 11, 2021'),
 });
-timer.updateTime();
+timer.startTimer();
